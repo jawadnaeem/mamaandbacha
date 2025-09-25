@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Clothing Store - Products</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-light p-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <img src="images/logo.png" alt="Kids Clothing Store Logo" class="logo">
+                <h1 class="d-inline">Kids Clothing Store</h1>
+            </div>
+            <nav class="d-flex align-items-center">
+                <ul class="nav mr-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html">View Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+                </ul>
+                <!-- Cart Icon -->
+                <a href="cart.html" class="position-relative">
+                    <img src="images/cart.png" alt="Cart" style="height:32px;">
+                    <span id="cart-count" class="badge badge-danger position-absolute" style="top:0; right:0; font-size:0.8rem;">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+    <h2>Our Products</h2>
+    <!-- Category Filter -->
+    <div class="mb-4">
+        <label class="mr-2 font-weight-bold">Filter by Category:</label>
+        <button class="btn btn-primary btn-sm mr-2" onclick="filterProducts('all')">All</button>
+        <button class="btn btn-info btn-sm mr-2" onclick="filterProducts('boys')">Boys</button>
+        <button class="btn btn-warning btn-sm" onclick="filterProducts('girls')">Girls</button>
+    </div>
+    <!-- Products Grid -->
+    <div class="row" id="products-list">
+    <!-- Example Product Card -->
+    <div class="col-md-4 mb-4 product-card" data-category="boys">
+        <div class="card">
+            <img src="images/boy-shirt.jpg" class="card-img-top" alt="Boy Shirt">
+            <div class="card-body">
+                <h5 class="card-title">Boys Shirt</h5>
+                <p class="card-text">Comfortable cotton shirt for boys.</p>
+                <p class="card-text font-weight-bold">$15</p>
+                <button class="btn btn-success add-to-cart-btn" data-id="boy-shirt" data-title="Boys Shirt" data-price="15">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4 product-card" data-category="girls">
+        <div class="card">
+            <img src="images/girl-dress.jpg" class="card-img-top" alt="Girl Dress">
+            <div class="card-body">
+                <h5 class="card-title">Girls Dress</h5>
+                <p class="card-text">Beautiful floral dress for girls.</p>
+                <p class="card-text font-weight-bold">$18</p>
+                <button class="btn btn-success add-to-cart-btn" data-id="girl-dress" data-title="Girls Dress" data-price="18">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add more product cards as needed, with data-category="boys" or "girls" -->
+    </div>
+</main>
+
+    <footer class="bg-light text-center p-3">
+        <p>&copy; 2023 Kids Clothing Store. All rights reserved.</p>
+        <div>
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a> |
+            <a href="https://wa.me" target="_blank">WhatsApp</a>
+        </div>
+    </footer>
+
+    <script>
+        function filterProducts(category) {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Cart logic
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '{}');
+        }
+
+        function setCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            let count = 0;
+            for (let key in cart) {
+                count += cart[key].quantity;
+            }
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const title = this.getAttribute('data-title');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    let cart = getCart();
+                    if (!cart[id]) {
+                        cart[id] = { title, price, quantity: 1 };
+                    } else {
+                        cart[id].quantity += 1;
+                    }
+                    setCart(cart);
+                    updateCartCount();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

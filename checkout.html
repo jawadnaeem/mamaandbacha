@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Kids Clothing Store</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Kids Clothing Store</h1>
+            <nav>
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="cart.html">View Cart</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Checkout</h2>
+        <!-- Cart Summary -->
+        <div class="alert alert-info" id="cart-summary" style="display:none;">
+            <span id="cart-items-count"></span> | <span id="cart-total-amount"></span>
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" required maxlength="50">
+                    <div class="invalid-feedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+                <div class="form-group col-md-6 d-flex align-items-end">
+                    <div class="form-check mb-2">
+                        <input type="checkbox" class="form-check-input" id="email-offers">
+                        <label class="form-check-label" for="email-offers">Email me with news and offers</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="first-name">First Name</label>
+                    <input type="text" class="form-control" id="first-name" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" class="form-control" id="last-name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" id="city" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="postal-code">Postal Code</label>
+                    <input type="text" class="form-control" id="postal-code" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Mobile Number</label>
+                <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Option</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="payment" id="cod" value="cod" required>
+                    <label class="form-check-label" for="cod">Cash on Delivery</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="payment" id="jazzcash" value="jazzcash" required>
+                    <label class="form-check-label" for="jazzcash">
+                        Pay by JazzCash <span class="text-muted">(0300-1234567)</span>
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Complete Purchase</button>
+        </form>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Kids Clothing Store. All rights reserved.</p>
+            <div class="social-media">
+                <a href="https://facebook.com" target="_blank">Facebook</a>
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+                <a href="https://whatsapp.com" target="_blank">WhatsApp</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Cart summary logic
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '{}');
+        }
+
+        function showCartSummary() {
+            const cart = getCart();
+            let totalItems = 0;
+            let totalAmount = 0;
+            for (let key in cart) {
+                totalItems += cart[key].quantity;
+                totalAmount += cart[key].quantity * cart[key].price;
+            }
+            if (totalItems > 0) {
+                document.getElementById('cart-summary').style.display = '';
+                document.getElementById('cart-items-count').textContent = 'Total Items: ' + totalItems;
+                document.getElementById('cart-total-amount').textContent = 'Total Amount: $' + totalAmount;
+            } else {
+                document.getElementById('cart-summary').style.display = 'none';
+            }
+        }
+
+        // Email and form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            showCartSummary();
+            var form = document.querySelector('form');
+            var emailInput = document.getElementById('email');
+            var firstName = document.getElementById('first-name');
+            var lastName = document.getElementById('last-name');
+            var address = document.getElementById('address');
+            var city = document.getElementById('city');
+            var phone = document.getElementById('phone');
+            var paymentRadios = document.getElementsByName('payment');
+
+            form.addEventListener('submit', function(e) {
+                let valid = true;
+
+                // Email validation
+                if (!emailInput.value.trim() || !emailInput.checkValidity()) {
+                    emailInput.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    emailInput.classList.remove('is-invalid');
+                }
+
+                // First Name
+                if (!firstName.value.trim()) {
+                    firstName.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    firstName.classList.remove('is-invalid');
+                }
+
+                // Last Name
+                if (!lastName.value.trim()) {
+                    lastName.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    lastName.classList.remove('is-invalid');
+                }
+
+                // Address
+                if (!address.value.trim()) {
+                    address.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    address.classList.remove('is-invalid');
+                }
+
+                // City
+                if (!city.value.trim()) {
+                    city.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    city.classList.remove('is-invalid');
+                }
+
+                // Mobile Number
+                if (!phone.value.trim()) {
+                    phone.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    phone.classList.remove('is-invalid');
+                }
+
+                // Payment Option
+                let paymentSelected = false;
+                for (let i = 0; i < paymentRadios.length; i++) {
+                    if (paymentRadios[i].checked) {
+                        paymentSelected = true;
+                        break;
+                    }
+                }
+                if (!paymentSelected) {
+                    paymentRadios[0].parentElement.classList.add('text-danger');
+                    paymentRadios[1].parentElement.classList.add('text-danger');
+                    valid = false;
+                } else {
+                    paymentRadios[0].parentElement.classList.remove('text-danger');
+                    paymentRadios[1].parentElement.classList.remove('text-danger');
+                }
+
+                // Prevent submit if not valid
+                if (!valid) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+
+            // Remove invalid class on input
+            [emailInput, firstName, lastName, address, city, phone].forEach(function(input) {
+                input.addEventListener('input', function() {
+                    if (input.value.trim()) {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+            });
+            emailInput.addEventListener('input', function() {
+                if (emailInput.checkValidity()) {
+                    emailInput.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
