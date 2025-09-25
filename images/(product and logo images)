@@ -1,0 +1,8 @@
+This directory is intended to store images for the website, including product images and the logo. Since I cannot create actual image files, please ensure to add your product images and logo images to this directory as needed. 
+
+You can name your images appropriately, for example:
+- logo.png (for the website logo)
+- boy_product1.jpg (for a boy's clothing product)
+- girl_product1.jpg (for a girl's clothing product)
+
+Make sure to place your images in the /kids-clothing-store/kids-clothing-store/images/ directory as per your project structure.
